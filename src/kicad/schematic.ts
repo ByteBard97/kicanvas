@@ -247,6 +247,14 @@ export class KicadSch {
             }
         }
 
+        // Check project-level text variables first (from .kicad_pro file)
+        // This allows title block fields to use ${TITLE}, ${REVISION}, etc.
+        // that are defined at the project level.
+        const project_var = this.project?.settings?.text_variables?.[name];
+        if (project_var !== undefined) {
+            return project_var;
+        }
+
         return this.title_block.resolve_text_var(name);
     }
 }
